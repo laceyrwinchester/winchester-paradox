@@ -1,0 +1,29 @@
+{
+  "items": [
+    {
+      "id": 101,
+      "title": "Nebula's Embrace",
+      "type": "Art",
+      "price": "299.99",
+      "content": "Digital capture of the Orion gases.",
+      "image": "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&q=80"
+    },
+    {
+      "id": 102,
+      "title": "The Paradox Protocol",
+      "type": "Article",
+      "price": "READ",
+      "content": "An exploration of digital consciousness.",
+      "image": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80"
+    },
+    {
+      "id": 103,
+      "title": "Void Crystal",
+      "type": "Product",
+      "price": "149.50",
+      "content": "Obsidian infused with bioluminescent resin.",
+      "image": "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?w=800&q=80"
+    }
+  ],
+  "subscribers": []
+}

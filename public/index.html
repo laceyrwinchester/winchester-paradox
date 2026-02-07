@@ -26,7 +26,7 @@
         @keyframes glow { from { text-shadow: 0 0 10px var(--cyan); } to { text-shadow: 0 0 20px var(--purple); } }
 
         /* Layout */
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; position: relative; z-index: 10; }
         header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; border-bottom: 1px solid var(--border); }
         
         /* Glass Cards */
@@ -44,12 +44,16 @@
             display: flex;
             flex-direction: column;
         }
+        /* 3D Hover Effect */
         .card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2); border-color: var(--cyan); }
         .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; filter: grayscale(40%); transition: 0.5s; }
         .card:hover img { filter: grayscale(0%); }
 
+        /* Canvas for Glitter Trail */
+        canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; }
+
         /* Inputs & Textareas */
-        input, textarea { background: #111; border: 1px solid #333; color: white; padding: 10px; width: 94%; margin-bottom: 10px; font-family: inherit; }
+        input, textarea, select { background: #111; border: 1px solid #333; color: white; padding: 10px; width: 94%; margin-bottom: 10px; font-family: inherit; }
         textarea { height: 100px; resize: vertical; }
 
         /* Buttons */
@@ -66,170 +70,9 @@
 </head>
 <body>
     <div class="nebula"></div>
+    <canvas id="glitter"></canvas>
+
     <div class="container">
         <header>
             <h1 class="glow-text">Winchester Paradox</h1>
-            <button class="btn" onclick="openAdminLogin()">Admin Access</button>
-        </header>
-
-        <div id="admin-panel" style="display:none; border: 1px solid var(--purple); padding: 20px; margin: 20px 0;">
-            <h2 style="color: var(--purple);">>> ADMIN PROTOCOL ACTIVE</h2>
-            <div style="display: grid; gap: 10px; max-width: 600px;">
-                <input type="text" id="new-title" placeholder="Title">
-                <select id="new-type" style="background:#111; color:white; padding:10px; border:1px solid #333;">
-                    <option value="Art">Art</option>
-                    <option value="Article">Article</option>
-                    <option value="Product">Product</option>
-                </select>
-                <input type="text" id="new-price" placeholder="Price (or 'Free')">
-                <input type="text" id="new-img" placeholder="Image URL">
-                <textarea id="new-desc" placeholder="Content / Full Article Text..."></textarea>
-                <button class="btn" onclick="addItem()">Upload to Database</button>
-            </div>
-        </div>
-
-        <div id="gallery" class="grid"></div>
-    </div>
-
-    <div id="login-modal" class="modal-overlay">
-        <div class="modal-content" style="max-width: 300px; text-align: center;">
-            <button class="close-btn" onclick="closeAllModals()">×</button>
-            <h2>IDENTIFY</h2>
-            <input type="text" id="username" placeholder="Username">
-            <input type="password" id="password" placeholder="Password">
-            <button class="btn" onclick="login()">Enter</button>
-        </div>
-    </div>
-
-    <div id="reader-modal" class="modal-overlay">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeAllModals()">×</button>
-            <h1 id="reader-title" style="color: var(--cyan); margin-bottom: 10px;"></h1>
-            <img id="reader-img" src="" style="width:100%; max-height:300px; object-fit:cover; border-radius:8px; margin-bottom:20px;">
-            <div id="reader-body" style="line-height: 1.8; font-size: 1.1rem; white-space: pre-wrap;"></div>
-        </div>
-    </div>
-
-    <script>
-        const API_URL = '/api';
-
-        // --- APP LOGIC ---
-        async function loadItems() {
-            const res = await fetch(`${API_URL}/items`);
-            const items = await res.json();
-            const grid = document.getElementById('gallery');
-            grid.innerHTML = '';
-            
-            items.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                
-                // Truncate text for the card view (first 100 chars)
-                const snippet = item.content.length > 100 ? item.content.substring(0, 100) + '...' : item.content;
-                
-                let actionBtn = '';
-                if (item.type === 'Article') {
-                    actionBtn = `<button class="btn btn-read" onclick="readArticle(${item.id})">READ TRANSMISSION</button>`;
-                } else {
-                    actionBtn = `<p style="margin-top:auto; color:var(--gold); text-align:right;">${item.price}</p>`;
-                }
-
-                card.innerHTML = `
-                    <img src="${item.image}" alt="${item.title}">
-                    <h3 style="margin: 10px 0; color: var(--cyan);">${item.title}</h3>
-                    <span style="font-size: 0.8rem; color: #aaa; text-transform:uppercase;">[${item.type}]</span>
-                    <p style="font-size: 0.9rem; color: #ccc;">${snippet}</p>
-                    ${actionBtn}
-                `;
-
-                // Admin Delete Button
-                if (localStorage.getItem('adminToken')) {
-                    const delBtn = document.createElement('button');
-                    delBtn.innerText = ' [DELETE] ';
-                    delBtn.style.color = 'red';
-                    delBtn.style.position = 'absolute';
-                    delBtn.style.top = '10px';
-                    delBtn.style.right = '10px';
-                    delBtn.style.background = 'rgba(0,0,0,0.7)';
-                    delBtn.style.border = 'none';
-                    delBtn.style.cursor = 'pointer';
-                    delBtn.onclick = (e) => { e.stopPropagation(); deleteItem(item.id); };
-                    card.appendChild(delBtn);
-                }
-                grid.appendChild(card);
-            });
-        }
-
-        // --- READER ---
-        let allItems = []; // Cache items for reading
-        async function cacheItems() {
-            const res = await fetch(`${API_URL}/items`);
-            allItems = await res.json();
-        }
-
-        function readArticle(id) {
-            const item = allItems.find(i => i.id == id);
-            if (!item) return;
-            document.getElementById('reader-title').innerText = item.title;
-            document.getElementById('reader-img').src = item.image;
-            document.getElementById('reader-body').innerText = item.content;
-            document.getElementById('reader-modal').style.display = 'flex';
-        }
-
-        // --- ADMIN ---
-        function openAdminLogin() { document.getElementById('login-modal').style.display = 'flex'; }
-        function closeAllModals() { 
-            document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none'); 
-        }
-
-        async function login() {
-            const u = document.getElementById('username').value;
-            const p = document.getElementById('password').value;
-            const res = await fetch(`${API_URL}/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: u, password: p })
-            });
-            const data = await res.json();
-            if (data.success) {
-                localStorage.setItem('adminToken', data.token);
-                document.getElementById('admin-panel').style.display = 'block';
-                closeAllModals();
-                loadItems();
-            } else { alert('ACCESS DENIED'); }
-        }
-
-        async function addItem() {
-            const item = {
-                title: document.getElementById('new-title').value,
-                type: document.getElementById('new-type').value,
-                price: document.getElementById('new-price').value,
-                image: document.getElementById('new-img').value,
-                content: document.getElementById('new-desc').value
-            };
-            await fetch(`${API_URL}/items`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(item)
-            });
-            await cacheItems(); // Refresh cache
-            loadItems();
-            alert('UPLOAD SUCCESSFUL');
-            // Clear inputs
-            document.getElementById('new-title').value = '';
-            document.getElementById('new-desc').value = '';
-        }
-
-        async function deleteItem(id) {
-            if(!confirm('DELETE DATA?')) return;
-            await fetch(`${API_URL}/items/${id}`, { method: 'DELETE' });
-            await cacheItems();
-            loadItems();
-        }
-
-        // Init
-        if (localStorage.getItem('adminToken')) document.getElementById('admin-panel').style.display = 'block';
-        cacheItems().then(loadItems);
-    </script>
-</body>
-</html>
+            <button class="btn" onclick

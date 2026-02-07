@@ -5,21 +5,235 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Winchester Paradox</title>
     <style>
-        body { margin: 0; background: #050505; color: #e0e0e0; font-family: monospace; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-        .container { text-align: center; z-index: 10; }
-        h1 { font-size: 3rem; color: #00d4ff; text-shadow: 0 0 20px rgba(0, 212, 255, 0.5); animation: breathe 4s infinite ease-in-out; }
-        p { letter-spacing: 0.2em; color: rgba(224,224,224,0.7); }
-        .orb { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(157,78,221,0.2) 0%, rgba(0,0,0,0) 70%); border-radius: 50%; animation: drift 20s infinite linear; z-index: 1; }
-        @keyframes breathe { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.02); opacity: 1; } }
-        @keyframes drift { 0% { transform: translate(-50px, -50px); } 50% { transform: translate(50px, 50px); } 100% { transform: translate(-50px, -50px); } }
+        /* --- COSMIC THEME & GLASSMORPHISM --- */
+        :root {
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --cyan: #00d4ff;
+            --purple: #9d4edd;
+            --gold: #ffd700;
+        }
+        body { margin: 0; background: var(--bg); color: #e0e0e0; font-family: 'Courier New', monospace; overflow-x: hidden; }
+        
+        /* Background Animation */
+        .nebula { position: fixed; width: 100vw; height: 100vh; background: radial-gradient(circle at 50% 50%, rgba(76, 29, 149, 0.15), transparent 70%); z-index: -1; animation: pulse 10s infinite alternate; }
+        @keyframes pulse { 0% { opacity: 0.5; transform: scale(1); } 100% { opacity: 0.8; transform: scale(1.1); } }
+
+        /* Typography */
+        h1, h2 { text-transform: uppercase; letter-spacing: 0.2em; text-shadow: 0 0 15px var(--cyan); }
+        .glow-text { animation: glow 3s infinite alternate; }
+        @keyframes glow { from { text-shadow: 0 0 10px var(--cyan); } to { text-shadow: 0 0 20px var(--purple); } }
+
+        /* Layout */
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; border-bottom: 1px solid var(--border); }
+        
+        /* Glass Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; margin-top: 50px; }
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 15px;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        /* 3D Hover Effect */
+        .card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 30px rgba(0, 212, 255, 0.2); border-color: var(--cyan); }
+        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; filter: grayscale(40%); transition: 0.5s; }
+        .card:hover img { filter: grayscale(0%); }
+
+        /* Buttons */
+        .btn { background: transparent; border: 1px solid var(--cyan); color: var(--cyan); padding: 10px 20px; cursor: pointer; transition: 0.3s; font-family: inherit; text-transform: uppercase; letter-spacing: 2px; }
+        .btn:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px var(--cyan); }
+
+        /* Canvas for Glitter Trail */
+        canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; }
+
+        /* Admin Modal */
+        #admin-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: #111; padding: 40px; border: 1px solid var(--purple); text-align: center; width: 300px; }
+        input { background: #222; border: 1px solid #444; color: white; padding: 10px; width: 90%; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-    <div class="orb"></div>
+    <div class="nebula"></div>
+    <canvas id="glitter"></canvas>
+
     <div class="container">
-        <h1>WINCHESTER PARADOX</h1>
-        <p>COSMIC BIOLUMINESCENCE DETECTED</p>
-        <p>[ PROTOCOL INITIALIZED ]</p>
+        <header>
+            <h1 class="glow-text">Winchester Paradox</h1>
+            <button class="btn" onclick="toggleAdmin()">Admin Access</button>
+        </header>
+
+        <div id="admin-panel" style="display:none; border: 1px solid var(--purple); padding: 20px; margin: 20px 0;">
+            <h2 style="color: var(--purple);">>> ADMIN PROTOCOL ACTIVE</h2>
+            <div style="display: grid; gap: 10px; max-width: 400px;">
+                <input type="text" id="new-title" placeholder="Item Title">
+                <input type="text" id="new-type" placeholder="Type (Art/Article)">
+                <input type="text" id="new-price" placeholder="Price">
+                <input type="text" id="new-img" placeholder="Image URL">
+                <input type="text" id="new-desc" placeholder="Description">
+                <button class="btn" onclick="addItem()">Upload to Database</button>
+            </div>
+        </div>
+
+        <div id="gallery" class="grid"></div>
     </div>
+
+    <div id="admin-modal">
+        <div class="modal-content">
+            <h2>IDENTIFY</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button class="btn" onclick="login()">Enter</button>
+            <button class="btn" onclick="closeModal()" style="border-color: red; color: red; margin-top: 10px;">Abort</button>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. GLITTER TRAIL SYSTEM ---
+        const canvas = document.getElementById('glitter');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+                this.color = `hsl(${Math.random() * 60 + 180}, 100%, 50%)`; // Cyans and Blues
+                this.life = 1.0;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.life -= 0.02;
+                this.size *= 0.95;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.life;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        window.addEventListener('mousemove', (e) => {
+            for(let i=0; i<3; i++) particles.push(new Particle(e.x, e.y));
+        });
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) { particles.splice(i, 1); i--; }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // --- 2. APP LOGIC ---
+        const API_URL = '/api';
+
+        async function loadItems() {
+            const res = await fetch(`${API_URL}/items`);
+            const items = await res.json();
+            const grid = document.getElementById('gallery');
+            grid.innerHTML = '';
+            
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}">
+                    <h3 style="margin: 10px 0; color: var(--cyan);">${item.title}</h3>
+                    <div style="display:flex; justify-content:space-between; font-size: 0.8rem; color: #aaa;">
+                        <span>${item.type}</span>
+                        <span style="color: var(--gold);">${item.price}</span>
+                    </div>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">${item.content}</p>
+                `;
+                // Add Admin Delete Button if logged in
+                if (localStorage.getItem('adminToken')) {
+                    const delBtn = document.createElement('button');
+                    delBtn.innerText = ' [DELETE] ';
+                    delBtn.style.color = 'red';
+                    delBtn.style.background = 'none';
+                    delBtn.style.border = 'none';
+                    delBtn.style.cursor = 'pointer';
+                    delBtn.onclick = (e) => { e.stopPropagation(); deleteItem(item.id); };
+                    card.appendChild(delBtn);
+                }
+                grid.appendChild(card);
+            });
+        }
+
+        // --- 3. ADMIN FUNCTIONS ---
+        function toggleAdmin() { document.getElementById('admin-modal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('admin-modal').style.display = 'none'; }
+
+        async function login() {
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            const res = await fetch(`${API_URL}/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: u, password: p })
+            });
+            const data = await res.json();
+            if (data.success) {
+                localStorage.setItem('adminToken', data.token);
+                document.getElementById('admin-panel').style.display = 'block';
+                closeModal();
+                loadItems(); // Reload to show delete buttons
+            } else {
+                alert('ACCESS DENIED');
+            }
+        }
+
+        async function addItem() {
+            const item = {
+                title: document.getElementById('new-title').value,
+                type: document.getElementById('new-type').value,
+                price: document.getElementById('new-price').value,
+                image: document.getElementById('new-img').value,
+                content: document.getElementById('new-desc').value
+            };
+            await fetch(`${API_URL}/items`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(item)
+            });
+            loadItems();
+            alert('ITEM UPLOADED');
+        }
+
+        async function deleteItem(id) {
+            if(!confirm('CONFIRM DELETION?')) return;
+            await fetch(`${API_URL}/items/${id}`, { method: 'DELETE' });
+            loadItems();
+        }
+
+        // Check if already logged in
+        if (localStorage.getItem('adminToken')) {
+            document.getElementById('admin-panel').style.display = 'block';
+        }
+
+        // Initialize
+        loadItems();
+    </script>
 </body>
 </html>

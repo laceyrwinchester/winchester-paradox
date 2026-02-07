@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: winchester-paradox
+    runtime: node
+    buildCommand: npm install && npm run build
+    startCommand: node server/server.js
+    plan: free
+    envVars:
+      - key: NODE_ENV
+        value: production

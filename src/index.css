@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400 ;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,7 +6,6 @@
 
 :root {
   --void-black: #050505;
-  --deep-void: #0a0a0f;
   --cosmic-cyan: #00d4ff;
   --nebula-purple: #9d4edd;
   --star-gold: #ffd700;
@@ -18,10 +17,6 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   font-family: 'Space Mono', monospace;
   background-color: var(--void-black);
@@ -30,7 +25,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Cosmic Background */
+/* COSMIC BACKGROUND - DRIFTING NEBULAE */
 .cosmic-bg {
   position: fixed;
   top: 0;
@@ -40,6 +35,7 @@ body {
   z-index: -2;
   background: var(--void-black);
   overflow: hidden;
+  pointer-events: none;
 }
 
 .nebula {
@@ -83,7 +79,7 @@ body {
   75% { transform: translate(20px, 30px) scale(1.05); }
 }
 
-/* Stars */
+/* TWINKLING STARS */
 .stars {
   position: fixed;
   top: 0;
@@ -96,13 +92,11 @@ body {
     radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.6), transparent),
     radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.9), transparent),
     radial-gradient(2px 2px at 160px 120px, rgba(255,255,255,0.7), transparent),
-    radial-gradient(1px 1px at 230px 80px, rgba(255,255,255,0.5), transparent),
-    radial-gradient(2px 2px at 300px 150px, rgba(255,255,255,0.8), transparent),
-    radial-gradient(1px 1px at 350px 200px, rgba(255,255,255,0.6), transparent),
-    radial-gradient(2px 2px at 400px 50px, rgba(255,255,255,0.7), transparent);
+    radial-gradient(1px 1px at 230px 80px, rgba(255,255,255,0.5), transparent);
   background-repeat: repeat;
-  background-size: 500px 400px;
+  background-size: 250px 250px;
   animation: twinkle 4s ease-in-out infinite;
+  pointer-events: none;
 }
 
 @keyframes twinkle {
@@ -110,7 +104,7 @@ body {
   50% { opacity: 1; }
 }
 
-/* Glassmorphism */
+/* GLASSMORPHISM */
 .glass {
   background: rgba(10, 10, 15, 0.7);
   backdrop-filter: blur(20px);
@@ -132,7 +126,7 @@ body {
   box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
 }
 
-/* Glow Text */
+/* GLOW TEXT */
 .glow-text {
   text-shadow: 
     0 0 10px rgba(0, 212, 255, 0.5),
@@ -140,7 +134,7 @@ body {
     0 0 30px rgba(0, 212, 255, 0.2);
 }
 
-/* Buttons */
+/* BUTTONS */
 .btn-cosmic {
   background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(157, 78, 221, 0.2) 100%);
   border: 1px solid rgba(0, 212, 255, 0.4);
@@ -162,7 +156,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* Filter Buttons */
+/* FILTER BUTTONS */
 .filter-btn {
   background: transparent;
   border: 1px solid rgba(0, 212, 255, 0.2);
@@ -189,7 +183,7 @@ body {
   box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
 }
 
-/* Type Badges */
+/* TYPE BADGES */
 .badge-art {
   background: rgba(157, 78, 221, 0.2);
   border: 1px solid rgba(157, 78, 221, 0.4);
@@ -208,13 +202,13 @@ body {
   color: var(--star-gold);
 }
 
-/* Main Content */
+/* MAIN CONTENT */
 .main-content {
   padding-top: 80px;
   min-height: 100vh;
 }
 
-/* Hero */
+/* HERO */
 .hero-section {
   min-height: calc(100vh - 80px);
   display: flex;
@@ -239,7 +233,7 @@ body {
   50% { background-position: 100% center; }
 }
 
-/* Terminal */
+/* TERMINAL */
 .terminal-input {
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(0, 212, 255, 0.3);
@@ -256,7 +250,7 @@ body {
   box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
 }
 
-/* Gallery Grid */
+/* GALLERY GRID */
 .masonry-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -264,7 +258,7 @@ body {
   padding: 20px;
 }
 
-/* Item Card */
+/* ITEM CARD */
 .item-card {
   position: relative;
   overflow: hidden;
@@ -313,28 +307,20 @@ body {
   font-size: 0.9rem;
 }
 
-/* Mirror Realm Effect (Art) - FLIPS HORIZONTALLY */
+/* MAGICAL HOVER EFFECTS */
+
+/* Mirror Realm - Art items flip horizontally */
 .item-card.mirror-realm:hover img {
   transform: scaleX(-1) scale(1.1);
   transition: transform 0.5s ease;
 }
 
-/* Void Reveal Effect (Article) - FADES AND SHOWS DASHED BORDER */
+/* Void Reveal - Article items fade */
 .item-card.void-reveal:hover {
   opacity: 0.8;
 }
 
-.item-card.void-reveal:hover .card-border {
-  border-style: dashed;
-  animation: march 1s linear infinite;
-}
-
-@keyframes march {
-  0% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: 20; }
-}
-
-/* Treasure Glow Effect (Product) - GOLD GLOW WITH SHIMMER */
+/* Treasure Glow - Product items shimmer gold */
 .item-card.treasure-glow:hover {
   box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
 }
@@ -355,31 +341,7 @@ body {
   100% { transform: translateX(100%); }
 }
 
-/* 3D Tilt Effect */
-.tilt-card {
-  transform-style: preserve-3d;
-  transition: transform 0.3s ease;
-}
-
-.tilt-card:hover {
-  transform: perspective(1000px) rotateY(5deg) rotateX(5deg);
-}
-
-/* Glitch Effect */
-@keyframes glitch {
-  0% { transform: translate(0); }
-  20% { transform: translate(-2px, 2px); }
-  40% { transform: translate(-2px, -2px); }
-  60% { transform: translate(2px, 2px); }
-  80% { transform: translate(2px, -2px); }
-  100% { transform: translate(0); }
-}
-
-.glitch-hover:hover {
-  animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both;
-}
-
-/* Admin */
+/* ADMIN */
 .admin-dashboard {
   display: grid;
   grid-template-columns: 250px 1fr;
@@ -417,7 +379,7 @@ body {
   border-left: 2px solid var(--cosmic-cyan);
 }
 
-/* Data Table */
+/* DATA TABLE */
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -448,7 +410,7 @@ body {
   background: rgba(0, 212, 255, 0.05);
 }
 
-/* Form */
+/* FORM */
 .form-label {
   color: rgba(224, 224, 224, 0.8);
   font-family: 'Space Mono', monospace;
@@ -476,7 +438,7 @@ body {
   box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
 }
 
-/* Scrollbar */
+/* SCROLLBAR */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -494,18 +456,9 @@ body {
   background: rgba(0, 212, 255, 0.5);
 }
 
-/* Loading */
+/* LOADING */
 .loading-pulse {
   animation: pulse 1.5s ease-in-out infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
-}
-
-/* Selection */
-::selection {
-  background: rgba(0, 212, 255, 0.3);
-  color: #fff;
-}

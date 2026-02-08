@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import FilterButtons from '../components/gallery/FilterButtons';
 import ItemCard from '../components/gallery/ItemCard';
 import { useData } from '../context/DataContext';
@@ -18,9 +18,13 @@ export default function Gallery() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-cyan-400 font-mono loading-pulse">
+        <motion.div 
+          className="text-cyan-400 font-mono"
+          animate={{ opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+        >
           Loading cosmic data...
-        </div>
+        </motion.div>
       </div>
     );
   }
@@ -62,17 +66,45 @@ export default function Gallery() {
 
       {/* Gallery Grid */}
       <div className="max-w-7xl mx-auto px-4 pb-16">
-        {filteredItems.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-gray-500 font-mono">No artifacts found in this frequency</p>
-          </div>
-        ) : (
-          <div className="masonry-grid">
-            {filteredItems.map((item, index) => (
-              <ItemCard key={item.id} item={item} index={index} />
-            ))}
-          </div>
-        )}
+        <AnimatePresence mode="wait">
+          {filteredItems.length === 0 ? (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              className="text-center py-20"
+            >
+              <p className="text-gray-500 font-mono">No artifacts found in this frequency</p>
+              <motion.div
+                className="mt-4 text-cyan-400/50 text-4xl"
+                animate={{ opacity: [0.3, 0.6, 0.3] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                ✦
+              </motion.div>
+            </motion.div>
+          ) : (
+            <motion.div 
+              className="masonry-grid"
+              layout
+            >
+              <AnimatePresence>
+                {filteredItems.map((item, index) => (
+                  <motion.div
+                    key={item.id}
+                    layout
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                  >
+                    <ItemCard item={item} index={index} />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );

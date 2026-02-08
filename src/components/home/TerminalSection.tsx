@@ -133,7 +133,7 @@ export default function TerminalSection() {
 
             {status === 'error' && (
               <motion.div
-                initial={{ opacity: 0, y: 10, x: [-10, 10, -10, 10, 0] }}
+               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-4 p-3 bg-red-500/10 border border-red-500/30 rounded flex items-center gap-2 text-red-400 text-sm"
               >

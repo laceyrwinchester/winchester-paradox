@@ -2,7 +2,7 @@ services:
   - type: web
     name: winchester-paradox
     runtime: node
-    buildCommand: npm install && npm run build && cd server && npm install
+    buildCommand: npm install && npm run build
     startCommand: node server/server.js
     plan: free
     envVars:

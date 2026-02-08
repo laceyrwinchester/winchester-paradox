@@ -14,16 +14,20 @@ function App() {
     <AuthProvider>
       <DataProvider>
         <Router>
-          <div className="app">
-            <ParticleTrail />
+          <div className="min-h-screen bg-[#050505] text-gray-200 relative">
+            {/* COSMIC BACKGROUND */}
             <div className="cosmic-bg">
               <div className="nebula nebula-1"></div>
               <div className="nebula nebula-2"></div>
               <div className="nebula nebula-3"></div>
             </div>
             <div className="stars"></div>
+            
+            {/* PARTICLE TRAIL - FOLLOWS MOUSE */}
+            <ParticleTrail />
+            
             <Navbar />
-            <main className="main-content">
+            <main className="main-content relative z-10">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/gallery" element={<Gallery />} />

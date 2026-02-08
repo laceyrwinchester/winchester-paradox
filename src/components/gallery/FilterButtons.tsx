@@ -1,48 +1,31 @@
 import { motion } from 'framer-motion';
 
-type FilterType = 'all' | 'art' | 'article' | 'product';
+// Your custom "Paradox" animations
+const variants = {
+  read: { whileHover: { scale: 1.1 } },           // Grow
+  view: { whileHover: { opacity: 0.5 } },         // Opaque/Transparent
+  acquire: { whileHover: { rotateY: 180 } },      // Mirror Reverse
+  all: { whileHover: { letterSpacing: "4px" } }   // Tech expansion
+};
 
-interface FilterButtonsProps {
-  activeFilter: FilterType;
-  onFilterChange: (filter: FilterType) => void;
-}
+export default function FilterButtons({ activeFilter, setActiveFilter }) {
+  const categories = ['ALL', 'READ', 'VIEW', 'ACQUIRE'];
 
-const filters: { value: FilterType; label: string; color: string }[] = [
-  { value: 'all', label: 'ALL', color: '#00d4ff' },
-  { value: 'art', label: 'VIEW', color: '#c77dff' },
-  { value: 'article', label: 'READ', color: '#00d4ff' },
-  { value: 'product', label: 'ACQUIRE', color: '#ffd700' },
-];
-
-export default function FilterButtons({ activeFilter, onFilterChange }: FilterButtonsProps) {
   return (
-    <div className="flex justify-center gap-3 flex-wrap">
-      {filters.map((filter, index) => (
+    <div className="flex flex-wrap justify-center gap-4 mb-12">
+      {categories.map((cat) => (
         <motion.button
-          key={filter.value}
-          onClick={() => onFilterChange(filter.value)}
-          className={`filter-btn ${activeFilter === filter.value ? 'active' : ''}`}
-          whileHover={{ 
-            scale: 1.05,
-            boxShadow: `0 0 20px ${filter.color}40`
-          }}
-          whileTap={{ scale: 0.95 }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1 }}
+          key={cat}
+          onClick={() => setActiveFilter(cat)}
+          // This line connects the specific animation to the button name
+          {...variants[cat.toLowerCase() as keyof typeof variants]}
+          className={`px-6 py-2 font-mono text-sm border-2 transition-all duration-300 ${
+            activeFilter === cat 
+            ? 'bg-cyan-400 text-black border-cyan-400 shadow-[0_0_15px_rgba(0,212,255,0.4)]' 
+            : 'text-cyan-400 border-cyan-400/20 hover:border-cyan-400'
+          }`}
         >
-          <motion.span
-            animate={activeFilter === filter.value ? {
-              textShadow: [
-                `0 0 5px ${filter.color}`,
-                `0 0 15px ${filter.color}`,
-                `0 0 5px ${filter.color}`
-              ]
-            } : {}}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            {filter.label}
-          </motion.span>
+          {cat}
         </motion.button>
       ))}
     </div>

@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit2, Trash2, X, Save } from 'lucide-react';
 import { useData, Item } from '../../context/DataContext';
 
-const emptyItem = {
+// FIX: Properly type the empty item to allow all types
+const emptyItem: Omit<Item, 'id' | 'createdAt' | 'status'> = {
   title: '',
-  type: 'art' as const,
+  type: 'art',
   content: '',
   price: 0,
   image: '',
@@ -98,7 +99,7 @@ export default function ItemManager() {
                 <label className="form-label">Type</label>
                 <select
                   value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value as any })}
+                  onChange={(e) => setFormData({ ...formData, type: e.target.value as Item['type'] })}
                   className="form-input"
                 >
                   <option value="art">Art (VIEW)</option>
@@ -109,140 +110,4 @@ export default function ItemManager() {
             </div>
 
             <div className="mb-4">
-              <label className="form-label">Image URL</label>
-              <input
-                type="url"
-                value={formData.image}
-                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                className="form-input"
-                placeholder="https://..."
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="form-label">Price ($)</label>
-              <input
-                type="number"
-                step="0.01"
-                value={formData.price}
-                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
-                className="form-input"
-              />
-            </div>
-
-            <div className="mb-6">
-              <label className="form-label">Content / Description</label>
-              <textarea
-                value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                className="form-input min-h-[120px] resize-y"
-                required
-              />
-            </div>
-
-            <div className="flex gap-3">
-              <button type="submit" className="btn-cosmic flex items-center gap-2">
-                <Save className="w-4 h-4" />
-                {editingId ? 'Update' : 'Create'}
-              </button>
-              <button type="button" onClick={resetForm} className="btn-cosmic opacity-70">
-                Cancel
-              </button>
-            </div>
-          </motion.form>
-        )}
-      </AnimatePresence>
-
-      {/* Items Table */}
-      <div className="glass-card overflow-hidden">
-        <table className="data-table">
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Title</th>
-              <th>Type</th>
-              <th>Price</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.id}>
-                <td>
-                  <img src={item.image} alt={item.title} className="w-16 h-16 object-cover rounded" />
-                </td>
-                <td className="font-cinzel text-white">{item.title}</td>
-                <td>
-                  <span className={`px-2 py-1 rounded text-xs uppercase ${
-                    item.type === 'art' ? 'bg-purple-500/20 text-purple-400' :
-                    item.type === 'article' ? 'bg-cyan-500/20 text-cyan-400' :
-                    'bg-yellow-500/20 text-yellow-400'
-                  }`}>
-                    {item.type}
-                  </span>
-                </td>
-                <td className="text-yellow-400">
-                  {item.price > 0 ? `$${item.price.toFixed(2)}` : 'FREE'}
-                </td>
-                <td>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleEdit(item)}
-                      className="p-2 hover:bg-cyan-400/20 rounded text-cyan-400 transition-colors"
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                    <button
-                      onClick={() => setShowDeleteConfirm(item.id)}
-                      className="p-2 hover:bg-red-500/20 rounded text-red-400 transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Delete Confirmation Modal */}
-      <AnimatePresence>
-        {showDeleteConfirm && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.9 }}
-              animate={{ scale: 1 }}
-              className="glass-card p-6 max-w-sm w-full"
-            >
-              <h3 className="text-lg font-cinzel text-white mb-4">Confirm Deletion</h3>
-              <p className="text-gray-400 text-sm mb-6">
-                This action cannot be undone. The artifact will be permanently removed from the collection.
-              </p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => handleDelete(showDeleteConfirm)}
-                  className="btn-cosmic bg-red-500/20 border-red-500/50 text-red-400 flex-1"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => setShowDeleteConfirm(null)}
-                  className="btn-cosmic flex-1 opacity-70"
-                >
-                  Cancel
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
+              <label className="form-label

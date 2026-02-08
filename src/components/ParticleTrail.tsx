@@ -15,7 +15,6 @@ export default function ParticleTrail() {
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // Create new particle every 3rd mouse move event to limit density
       if (Math.random() > 0.3) return;
       
       const colors = ['#00d4ff', '#9d4edd', '#ffd700', '#c77dff'];

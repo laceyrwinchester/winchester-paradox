@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Edit2, Trash2, X, Save } from 'lucide-react';
 import { useData, Item } from '../../context/DataContext';
 
-// FIX: Properly type the empty item to allow all types
 const emptyItem: Omit<Item, 'id' | 'createdAt' | 'status'> = {
   title: '',
   type: 'art',
@@ -69,7 +68,6 @@ export default function ItemManager() {
         </button>
       </div>
 
-      {/* Add/Edit Form */}
       <AnimatePresence>
         {isEditing && (
           <motion.form
@@ -110,4 +108,102 @@ export default function ItemManager() {
             </div>
 
             <div className="mb-4">
-              <label className="form-label
+              <label className="form-label">Image URL</label>
+              <input
+                type="url"
+                value={formData.image}
+                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                className="form-input"
+                placeholder="https://..."
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="form-label">Price ($)</label>
+              <input
+                type="number"
+                step="0.01"
+                value={formData.price}
+                onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) || 0 })}
+                className="form-input"
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="form-label">Content / Description</label>
+              <textarea
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                className="form-input min-h-[120px] resize-y"
+                required
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button type="submit" className="btn-cosmic flex items-center gap-2">
+                <Save className="w-4 h-4" />
+                {editingId ? 'Update' : 'Create'}
+              </button>
+              <button type="button" onClick={resetForm} className="btn-cosmic opacity-70">
+                Cancel
+              </button>
+            </div>
+          </motion.form>
+        )}
+      </AnimatePresence>
+
+      <div className="glass-card overflow-hidden">
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Title</th>
+              <th>Type</th>
+              <th>Price</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item) => (
+              <tr key={item.id}>
+                <td>
+                  <img src={item.image} alt={item.title} className="w-16 h-16 object-cover rounded" />
+                </td>
+                <td className="font-cinzel text-white">{item.title}</td>
+                <td>
+                  <span className={`px-2 py-1 rounded text-xs uppercase ${
+                    item.type === 'art' ? 'bg-purple-500/20 text-purple-400' :
+                    item.type === 'article' ? 'bg-cyan-500/20 text-cyan-400' :
+                    'bg-yellow-500/20 text-yellow-400'
+                  }`}>
+                    {item.type}
+                  </span>
+                </td>
+                <td className="text-yellow-400">
+                  {item.price > 0 ? `$${item.price.toFixed(2)}` : 'FREE'}
+                </td>
+                <td>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEdit(item)}
+                      className="p-2 hover:bg-cyan-400/20 rounded text-cyan-400 transition-colors"
+                    >
+                      <Edit2 className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setShowDeleteConfirm(item.id)}
+                      className="p-2 hover:bg-red-500/20 rounded text-red-400 transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <AnimatePresence>
+        {showDelete

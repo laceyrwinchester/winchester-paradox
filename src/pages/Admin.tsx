@@ -42,124 +42,80 @@ export default function Admin() {
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="glass-card p-8 md:p-12 w-full max-w-md relative overflow-hidden"
+        className="glass-card p-8 md:p-12 w-full max-w-md"
       >
-        {/* Animated border */}
-        <motion.div
-          className="absolute inset-0 rounded-xl opacity-50 pointer-events-none"
-          animate={{
-            boxShadow: [
-              'inset 0 0 20px rgba(0,212,255,0.1)',
-              'inset 0 0 40px rgba(0,212,255,0.3)',
-              'inset 0 0 20px rgba(0,212,255,0.1)',
-            ]
-          }}
-          transition={{ duration: 3, repeat: Infinity }}
-        />
-
-        <div className="text-center mb-8 relative z-10">
-          <motion.div 
-            className="w-16 h-16 mx-auto mb-4 rounded-full bg-cyan-400/10 flex items-center justify-center"
-            animate={{ 
-              boxShadow: [
-                '0 0 20px rgba(0,212,255,0.3)',
-                '0 0 40px rgba(0,212,255,0.5)',
-                '0 0 20px rgba(0,212,255,0.3)',
-              ]
-            }}
-            transition={{ duration: 2, repeat: Infinity }}
-          >
-            <motion.div
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 4, repeat: Infinity }}
-            >
-              <Lock className="w-8 h-8 text-cyan-400" />
-            </motion.div>
-          </motion.div>
-          <h1 className="text-2xl font-cinzel text-white mb-2">
-            Admin Access
-          </h1>
-          <p className="text-gray-500 text-sm font-mono">
-            Authentication Required
-          </p>
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-cyan-400/10 flex items-center justify-center animate-pulse">
+            <Lock className="w-8 h-8 text-cyan-400" />
+          </div>
+          <h1 className="text-2xl font-cinzel text-white mb-2">Access Protocol</h1>
+          <p className="text-gray-400 text-sm font-mono">Enter authentication credentials</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="form-label">Username</label>
-            <motion.input
+            <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="form-input"
               placeholder="admin"
               required
-              whileFocus={{ scale: 1.02 }}
             />
           </div>
 
           <div>
             <label className="form-label">Password</label>
             <div className="relative">
-              <motion.input
+              <input
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="form-input pr-10"
                 placeholder="••••••••"
                 required
-                whileFocus={{ scale: 1.02 }}
               />
-              <motion.button
+              <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-                whileHover={{ scale: 1.2, rotate: 180 }}
-                transition={{ duration: 0.3 }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-cyan-400 transition-colors"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-              </motion.button>
+              </button>
             </div>
           </div>
 
           {error && (
             <motion.div
               initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: [0, -10, 10, -10, 10, 0] }}
-              className="p-3 bg-red-500/10 border border-red-500/30 rounded text-red-400 text-sm text-center"
+              animate={{ opacity: 1, x: 0 }}
+              className="p-3 bg-red-500/10 border border-red-500/30 rounded text-red-400 text-sm font-mono text-center"
             >
               {error}
             </motion.div>
           )}
 
-          <motion.button
+          <button
             type="submit"
             disabled={loading}
-            className="btn-cosmic w-full"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            className="btn-cosmic w-full flex items-center justify-center gap-2"
           >
             {loading ? (
-              <motion.span
-                animate={{ opacity: [0.4, 1, 0.4] }}
-                transition={{ duration: 1, repeat: Infinity }}
-              >
-                Authenticating...
-              </motion.span>
+              <span className="loading-pulse">Authenticating...</span>
             ) : (
-              'Access Protocol'
+              <>
+                <Lock className="w-4 h-4" />
+                Access Protocol
+              </>
             )}
-          </motion.button>
+          </button>
         </form>
 
-        <div className="mt-6 text-center relative z-10">
-          <motion.p 
-            className="text-gray-600 text-xs font-mono"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          >
-            [SECURE_CONNECTION]
-          </motion.p>
+        <div className="mt-6 text-center">
+          <p className="text-gray-600 text-xs font-mono">
+            Default: admin / paradox
+          </p>
         </div>
       </motion.div>
     </motion.div>

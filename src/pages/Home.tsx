@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Eye, BookOpen, Gem } from 'lucide-react';
 import HeroSection from '../components/home/HeroSection';
-import TerminalSection from '../components/home/TerminalSection';
+import JoinTerminal from '../components/home/JoinTerminal';
 
 export default function Home() {
   return (
@@ -12,7 +12,7 @@ export default function Home() {
       transition={{ duration: 0.5 }}
     >
       <HeroSection />
-      <TerminalSection />
+    <JoinTerminal />
       
       {/* Features Section */}
       <section className="py-24 px-4">

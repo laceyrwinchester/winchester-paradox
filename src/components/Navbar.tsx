@@ -23,8 +23,13 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
-            <Sparkles className="w-5 h-5 text-cyan-400 group-hover:animate-pulse" />
-            <span className="font-cinzel text-lg tracking-wider text-white">
+            <motion.div
+              whileHover={{ rotate: 180 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Sparkles className="w-5 h-5 text-cyan-400" />
+            </motion.div>
+            <span className="font-cinzel text-lg tracking-wider text-white group-hover:text-cyan-400 transition-colors">
               Winchester<span className="text-cyan-400">Paradox</span>
             </span>
           </Link>
@@ -35,9 +40,17 @@ export default function Navbar() {
               <Link
                 key={link.path}
                 to={link.path}
-                className={`nav-link ${location.pathname === link.path ? 'text-cyan-400' : ''}`}
+                className={`relative font-mono text-sm tracking-wider transition-colors ${
+                  location.pathname === link.path ? 'text-cyan-400' : 'text-gray-400 hover:text-cyan-400'
+                }`}
               >
                 {link.label}
+                {location.pathname === link.path && (
+                  <motion.div
+                    layoutId="navbar-indicator"
+                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-cyan-400"
+                  />
+                )}
               </Link>
             ))}
             <Link
@@ -51,7 +64,7 @@ export default function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-cyan-400 p-2"
+            className="md:hidden text-cyan-400 p-2 hover:bg-cyan-400/10 rounded-lg transition-colors"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -74,7 +87,9 @@ export default function Navbar() {
                   key={link.path}
                   to={link.path}
                   onClick={() => setIsOpen(false)}
-                  className={`block nav-link ${location.pathname === link.path ? 'text-cyan-400' : ''}`}
+                  className={`block font-mono text-sm tracking-wider ${
+                    location.pathname === link.path ? 'text-cyan-400' : 'text-gray-400'
+                  }`}
                 >
                   {link.label}
                 </Link>

@@ -19,6 +19,7 @@ export default {
         purple: {
           400: '#c77dff',
           500: '#9d4edd',
+          600: '#7b2cbf',
         },
         gold: {
           400: '#ffd700',
@@ -62,12 +63,12 @@ export default {
           '50%': { transform: 'translateY(-20px)' },
         },
         glitch: {
-          '0%': { transform: translate(0) },
-          '20%': { transform: translate(-2px, 2px) },
-          '40%': { transform: translate(-2px, -2px) },
-          '60%': { transform: translate(2px, 2px) },
-          '80%': { transform: translate(2px, -2px) },
-          '100%': { transform: translate(0) },
+          '0%': { transform: 'translate(0)' },
+          '20%': { transform: 'translate(-2px, 2px)' },
+          '40%': { transform: 'translate(-2px, -2px)' },
+          '60%': { transform: 'translate(2px, 2px)' },
+          '80%': { transform: 'translate(2px, -2px)' },
+          '100%': { transform: 'translate(0)' },
         },
       },
     },

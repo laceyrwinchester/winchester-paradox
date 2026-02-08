@@ -1,3 +1,5 @@
+// Terminal section component - fresh deploy
+import { useState } from 'react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Send, Check, AlertCircle } from 'lucide-react';

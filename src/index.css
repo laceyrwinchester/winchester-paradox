@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400 ;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -311,6 +311,72 @@ body {
   font-family: 'Space Mono', monospace;
   color: var(--star-gold);
   font-size: 0.9rem;
+}
+
+/* Mirror Realm Effect (Art) - FLIPS HORIZONTALLY */
+.item-card.mirror-realm:hover img {
+  transform: scaleX(-1) scale(1.1);
+  transition: transform 0.5s ease;
+}
+
+/* Void Reveal Effect (Article) - FADES AND SHOWS DASHED BORDER */
+.item-card.void-reveal:hover {
+  opacity: 0.8;
+}
+
+.item-card.void-reveal:hover .card-border {
+  border-style: dashed;
+  animation: march 1s linear infinite;
+}
+
+@keyframes march {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 20; }
+}
+
+/* Treasure Glow Effect (Product) - GOLD GLOW WITH SHIMMER */
+.item-card.treasure-glow:hover {
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+}
+
+.item-card.treasure-glow:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255,215,0,0.1) 50%, transparent 70%);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* 3D Tilt Effect */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease;
+}
+
+.tilt-card:hover {
+  transform: perspective(1000px) rotateY(5deg) rotateX(5deg);
+}
+
+/* Glitch Effect */
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.glitch-hover:hover {
+  animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both;
 }
 
 /* Admin */

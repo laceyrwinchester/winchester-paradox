@@ -6,6 +6,7 @@
 
 :root {
   --void-black: #050505;
+  --deep-void: #0a0a0f;
   --cosmic-cyan: #00d4ff;
   --nebula-purple: #9d4edd;
   --star-gold: #ffd700;
@@ -17,6 +18,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Space Mono', monospace;
   background-color: var(--void-black);
@@ -25,7 +30,6 @@ body {
   overflow-x: hidden;
 }
 
-/* COSMIC BACKGROUND - DRIFTING NEBULAE */
 .cosmic-bg {
   position: fixed;
   top: 0;
@@ -35,7 +39,6 @@ body {
   z-index: -2;
   background: var(--void-black);
   overflow: hidden;
-  pointer-events: none;
 }
 
 .nebula {
@@ -79,7 +82,6 @@ body {
   75% { transform: translate(20px, 30px) scale(1.05); }
 }
 
-/* TWINKLING STARS */
 .stars {
   position: fixed;
   top: 0;
@@ -96,7 +98,6 @@ body {
   background-repeat: repeat;
   background-size: 250px 250px;
   animation: twinkle 4s ease-in-out infinite;
-  pointer-events: none;
 }
 
 @keyframes twinkle {
@@ -104,7 +105,6 @@ body {
   50% { opacity: 1; }
 }
 
-/* GLASSMORPHISM */
 .glass {
   background: rgba(10, 10, 15, 0.7);
   backdrop-filter: blur(20px);
@@ -126,7 +126,6 @@ body {
   box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
 }
 
-/* GLOW TEXT */
 .glow-text {
   text-shadow: 
     0 0 10px rgba(0, 212, 255, 0.5),
@@ -134,7 +133,6 @@ body {
     0 0 30px rgba(0, 212, 255, 0.2);
 }
 
-/* BUTTONS */
 .btn-cosmic {
   background: linear-gradient(135deg, rgba(0, 212, 255, 0.2) 0%, rgba(157, 78, 221, 0.2) 100%);
   border: 1px solid rgba(0, 212, 255, 0.4);
@@ -156,7 +154,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* FILTER BUTTONS */
 .filter-btn {
   background: transparent;
   border: 1px solid rgba(0, 212, 255, 0.2);
@@ -183,7 +180,6 @@ body {
   box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
 }
 
-/* TYPE BADGES */
 .badge-art {
   background: rgba(157, 78, 221, 0.2);
   border: 1px solid rgba(157, 78, 221, 0.4);
@@ -202,13 +198,11 @@ body {
   color: var(--star-gold);
 }
 
-/* MAIN CONTENT */
 .main-content {
   padding-top: 80px;
   min-height: 100vh;
 }
 
-/* HERO */
 .hero-section {
   min-height: calc(100vh - 80px);
   display: flex;
@@ -233,7 +227,6 @@ body {
   50% { background-position: 100% center; }
 }
 
-/* TERMINAL */
 .terminal-input {
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(0, 212, 255, 0.3);
@@ -250,7 +243,6 @@ body {
   box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
 }
 
-/* GALLERY GRID */
 .masonry-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -258,7 +250,6 @@ body {
   padding: 20px;
 }
 
-/* ITEM CARD */
 .item-card {
   position: relative;
   overflow: hidden;
@@ -307,41 +298,6 @@ body {
   font-size: 0.9rem;
 }
 
-/* MAGICAL HOVER EFFECTS */
-
-/* Mirror Realm - Art items flip horizontally */
-.item-card.mirror-realm:hover img {
-  transform: scaleX(-1) scale(1.1);
-  transition: transform 0.5s ease;
-}
-
-/* Void Reveal - Article items fade */
-.item-card.void-reveal:hover {
-  opacity: 0.8;
-}
-
-/* Treasure Glow - Product items shimmer gold */
-.item-card.treasure-glow:hover {
-  box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
-}
-
-.item-card.treasure-glow:hover::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(45deg, transparent 30%, rgba(255,215,0,0.1) 50%, transparent 70%);
-  animation: shimmer 2s infinite;
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-/* ADMIN */
 .admin-dashboard {
   display: grid;
   grid-template-columns: 250px 1fr;
@@ -379,7 +335,6 @@ body {
   border-left: 2px solid var(--cosmic-cyan);
 }
 
-/* DATA TABLE */
 .data-table {
   width: 100%;
   border-collapse: collapse;
@@ -410,7 +365,6 @@ body {
   background: rgba(0, 212, 255, 0.05);
 }
 
-/* FORM */
 .form-label {
   color: rgba(224, 224, 224, 0.8);
   font-family: 'Space Mono', monospace;
@@ -423,42 +377,4 @@ body {
 
 .form-input {
   width: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid rgba(0, 212, 255, 0.2);
-  color: #e0e0e0;
-  font-family: 'Space Mono', monospace;
-  padding: 10px 14px;
-  border-radius: 4px;
-  outline: none;
-  transition: all 0.3s ease;
-}
-
-.form-input:focus {
-  border-color: var(--cosmic-cyan);
-  box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
-}
-
-/* SCROLLBAR */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--void-black);
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 212, 255, 0.3);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 212, 255, 0.5);
-}
-
-/* LOADING */
-.loading-pulse {
-  animation: pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes pulse {
+ 

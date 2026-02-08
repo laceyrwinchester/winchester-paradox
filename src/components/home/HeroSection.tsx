@@ -14,7 +14,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="hero-title glow-text font-cinzel font-bold">
+          <h1 className="hero-title glow-text font-cinzel font-bold animate-breathe">
             Winchester Paradox
           </h1>
         </motion.div>
@@ -34,30 +34,55 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="mt-12"
         >
-          <button
+          <motion.button
             onClick={scrollToTerminal}
-            className="animate-bounce"
+            className="text-cyan-400"
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            whileHover={{ scale: 1.2 }}
           >
-            <ChevronDown className="w-8 h-8 text-cyan-400 mx-auto" />
-          </button>
+            <ChevronDown className="w-8 h-8" />
+          </motion.button>
         </motion.div>
       </div>
 
       {/* Floating decorative elements */}
       <motion.div
         className="absolute top-1/4 left-10 w-2 h-2 bg-cyan-400 rounded-full"
-        animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+        animate={{ 
+          scale: [1, 1.5, 1], 
+          opacity: [0.5, 1, 0.5],
+          y: [0, -20, 0]
+        }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
         className="absolute bottom-1/3 right-20 w-3 h-3 bg-purple-500 rounded-full"
-        animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0.8, 0.3] }}
+        animate={{ 
+          scale: [1, 1.3, 1], 
+          opacity: [0.3, 0.8, 0.3],
+          x: [0, 15, 0]
+        }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
       />
       <motion.div
         className="absolute top-1/2 right-1/4 w-1 h-1 bg-yellow-400 rounded-full"
-        animate={{ scale: [1, 2, 1], opacity: [0.4, 1, 0.4] }}
+        animate={{ 
+          scale: [1, 2, 1], 
+          opacity: [0.4, 1, 0.4],
+          rotate: [0, 180, 360]
+        }}
         transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+      />
+      <motion.div
+        className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-cyan-400 rounded-full"
+        animate={{ 
+          scale: [1, 1.8, 1], 
+          opacity: [0.3, 0.9, 0.3],
+          y: [0, 30, 0],
+          x: [0, -10, 0]
+        }}
+        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
       />
     </section>
   );
